@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>  
+<note>
+	<tittle>这个是标题</tittle>
+	<page value="25"></page>
+	<pub>
+		<com>某出版社</com>
+		<time>1</time>
+		<address>不详</address>
+	</pub>
+	<auther>
+		<type>第一作者</type>
+		<name>某某</name>
+	</auther>
+	<auther type="第二作者" name="佚名"/>
+</note>
