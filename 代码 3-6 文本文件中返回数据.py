@@ -1,0 +1,1 @@
+file_out = open('O:\TEMP\data.txt')data_list = []for k in file_out:	data_list.append([k[:-1].split(' ')])file_out.close()

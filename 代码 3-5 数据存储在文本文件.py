@@ -1,0 +1,1 @@
+file_out = open('O:\TEMP\data.txt','w')for k in result_list:	file_out.writelines('%s %s %s\n' % (k[0], k[1], k[2]))file_out.close()

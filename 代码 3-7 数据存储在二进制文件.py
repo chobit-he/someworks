@@ -1,0 +1,1 @@
+import picklefile_out = open('O:\TEMP\data.plk','wb')pickle.dump(result_list, file_out)file_out.close()
