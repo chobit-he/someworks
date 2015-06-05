@@ -1,1 +1,0 @@
-import pymysql as psconn = ps.connect(host='localhost', user='root', passwd='test', db='test')cur = conn.cursor()for k in result_list:	sql = 'INSERT INTO `test` (`bid1`, `uid`, `bid2`) VALUES (%s, %s, %s)'	cur.execute(sql, (k[0], k[1], k[2]))	conn.commit()cur.close()conn.close()

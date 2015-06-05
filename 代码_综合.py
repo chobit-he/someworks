@@ -1,7 +1,9 @@
-# encoding: UTF-8
+# -*- coding: utf-8 -*-
 import os, urllib.request, json, sys, re, http.cookiejar, urllib.parse
 from wsgiref.simple_server import make_server, demo_app
 import threading, time, pickle, random, xml.dom.minidom
+from 代码_3_4_Python获取RSS格式的数据_增加深度 import deepprocess # 导入方法
+from 代码_4_16_获取豆瓣API的数据 import getreviews, mainprocess
 
 # 用户信息
 user_email = '949100761@qq.com'
@@ -175,7 +177,7 @@ def get_proxy_list():
 	proxy_list = re.findall('<tr>\n<td>(.+?)</td>\n<td>(\d+)</td>', html)
 	return proxy_list
 
-def proxy_open_url(urls, accetoken_jsons, proxy_url_lists):
+def open_url(urls, accetoken_jsons, proxy_url_lists):
 	webCookie = urllib.request.HTTPCookieProcessor(http.cookiejar.CookieJar())
 	proxy_ip_port = random.choice(proxy_url_lists)
 	proxy_support = urllib.request.ProxyHandler({'http': ':'.join(proxy_ip_port)})
@@ -185,46 +187,7 @@ def proxy_open_url(urls, accetoken_jsons, proxy_url_lists):
 	openner.addheaders = [('Authorization', 'Bearer %s' % (accetoken_jsons['access_token']))]
 	req = openner.open(urls)
 	return req
-
-def getreviews(bids, uids):
-	url = '%s/%s/reviews' % (p_url, uids)
-	html = proxy_open_url(url, accetoken_json, proxy_url_list)
-	DOMTree = xml.dom.minidom.parseString(html.read().decode('utf-8'))
-	feed = DOMTree.getElementsByTagName( "feed" )[0]
-	rbook = feed.getElementsByTagName( "opensearch:totalResults" )[0].childNodes[0].nodeValue
-	m = 1
-	while int(rbook) > 50 * (m-1):
-		url = '%s/%s/reviews?max-results=50&start-index=%d' % (p_url, uids, 50 * (m-1) + 1)
-		html = proxy_open_url(url, accetoken_json, proxy_url_list)
-		DOMTree = xml.dom.minidom.parseString(html.read().decode('utf-8'))
-		feed = DOMTree.getElementsByTagName( "feed" )[0]
-		entry = feed.getElementsByTagName( "feed" )
-		for i in entry:
-			subject = i.getElementsByTagName( "db:subject" )[0]
-			lbid = subject.getElementsByTagName( "id" )[0].childNodes[0].nodeValue
-			if lbid.startswith('http://book.douban.com/review/'):
-				bid_re = re.search('book.douban.com/subject/(.+?)/', lbid)
-				bid = bid_re.group(1)
-				result_list.append([bids, uids, bid])
-				if deep_int <= deep_r: # 深度判定循环
-					mainprocess(bid) ##
-def mainprocess(bids):
-	global deep_int ##
-	deep_int += 1 ##
-	url = '%s/%s/reviews' % (base_url, bids)
-	html = proxy_open_url(url, accetoken_json, proxy_url_list)
-	html = json.loads(html.read().decode('utf-8'))
-	reviews_num = html['total']
-	n = 1
-	while reviews_num > 100 * (n-1):
-		url = '%s/%s/reviews?count=100&start=%d' % (base_url, bids, 100 * (n-1))
-		html = proxy_open_url(url, accetoken_json, proxy_url_list)
-		html = json.loads(html.read().decode('utf-8'))
-		for i in html['reviews']:
-			a = i['author']
-			getreviews(bids, a['uid'])
-		n += 1
-
+		
 # main
 def test_main():
 	# 检查Python版本
@@ -245,14 +208,13 @@ def test_main():
 
 	proxy_url_list = get_proxy_list()
 
-	base_url = 'http://api.douban.com/v2/book'
-	p_url = 'http://api.douban.com/people'
-	deep_r = 3 # 设定深度
+	base_url = 'https://api.douban.com/v2/book'
+	p_url = 'https://api.douban.com/people'
 	deep_int = 0 ##
 	result_list = []
-	mainprocess('5686369')
+	deepprocess('4718495', 1)
 	print(result_list)
 
 if __name__ == '__main__':
-	# test_main()
+	test_main()
 	pass

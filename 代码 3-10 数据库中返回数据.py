@@ -1,1 +1,0 @@
-import pymysql as psconn = ps.connect(host='localhost', user='root', passwd='test', db='test')cur = conn.cursor()cur.execute('SELECT * FROM test')data = cur.fetchall()cur.close()conn.close()
