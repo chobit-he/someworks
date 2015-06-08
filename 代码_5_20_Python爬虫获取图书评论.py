@@ -32,5 +32,5 @@ def mainprocess(bids):
 		n += 1
 deep_int = 0
 result_list = []
-deepprocess('4718495', 2)
+deepprocess('4718495', 1)
 print(result_list)
